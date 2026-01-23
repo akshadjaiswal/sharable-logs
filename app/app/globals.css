@@ -1,3 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  /* Focus visible styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+}
+
+@layer components {
+  /* Shiki code block styling overrides */
+  .shiki,
+  .shiki span {
+    color: var(--shiki-light) !important;
+    background-color: transparent !important;
+    font-style: var(--shiki-light-font-style) !important;
+    font-weight: var(--shiki-light-font-weight) !important;
+    text-decoration: var(--shiki-light-text-decoration) !important;
+  }
+
+  .shiki {
+    @apply font-mono text-sm leading-relaxed;
+  }
+
+  /* Line numbers styling */
+  .line-number {
+    @apply inline-block w-12 text-right pr-4 text-muted-foreground select-none;
+  }
+
+  .line {
+    @apply block hover:bg-muted/30 transition-colors cursor-pointer;
+  }
+
+  .line[data-highlighted="true"] {
+    @apply bg-accent/10 border-l-2 border-accent;
+  }
+}
+
+@layer utilities {
+  /* Text balance for headlines */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Small caps utility */
+  .small-caps {
+    font-variant: small-caps;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* Gradient text for hero */
+  .gradient-text {
+    background: linear-gradient(135deg, #1a1a1a 0%, #6b6b6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
