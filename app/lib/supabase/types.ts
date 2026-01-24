@@ -68,7 +68,8 @@ export interface ListLogsResponse {
 }
 
 // Helper type for database inserts (omits auto-generated fields)
-export type LogInsert = Omit<Log, 'id' | 'created_at' | 'view_count'> & {
+export type LogInsert = Partial<Omit<Log, 'id' | 'created_at' | 'view_count'>> & {
+  content: string;
   id?: string;
   created_at?: string;
   view_count?: number;

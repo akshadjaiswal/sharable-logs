@@ -126,7 +126,7 @@ export function CommentThread({ logId, lineNumber, onClose }: CommentThreadProps
             <p>No comments yet. Be the first!</p>
           </div>
         ) : (
-          commentsData?.comments.map((comment) => (
+          commentsData?.comments.map((comment: Comment) => (
             <CommentItem
               key={comment.id}
               comment={comment}

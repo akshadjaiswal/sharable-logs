@@ -15,7 +15,7 @@ export function Features() {
     {
       title: 'Smart Context Detection',
       description:
-        'Automatically identifies whether it's Next.js, Python, Docker, or one of 20+ frameworks and languages.',
+        'Automatically identifies whether it\'s Next.js, Python, Docker, or one of 20+ frameworks and languages.',
       icon: Sparkles,
     },
     {
