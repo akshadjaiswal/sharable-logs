@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] })
 import { QueryProvider } from '@/lib/query-provider'
+import { Header } from '@/components/layout/header'
+import { Footer } from '@/components/layout/footer'
 
 export const metadata: Metadata = {
-  title: 'app',
-  description: 'Built with DevStart CLI',
+  title: 'LogShare - Share Terminal Logs Beautifully',
+  description: 'Share terminal logs with beautiful formatting, syntax highlighting, and collaborative features. Built for developers who value beautiful tools.',
   icons: {
     icon: '/icon.svg',
   },
@@ -20,7 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}><QueryProvider>{children}</QueryProvider></body>
+      <body className="font-body">
+        <QueryProvider>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </QueryProvider>
+      </body>
     </html>
   )
 }
