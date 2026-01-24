@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { QueryProvider } from '@/lib/query-provider'
+import { ToastProvider } from '@/lib/toast-provider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-body">
         <QueryProvider>
+          <ToastProvider />
           <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-1">{children}</main>
