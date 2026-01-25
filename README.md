@@ -2,7 +2,6 @@
 
 LogShare is a modern web application for sharing terminal logs with beautiful formatting, syntax highlighting, and collaborative features. Built for developers who value beautiful tools.
 
-![LogShare Preview](https://via.placeholder.com/1200x600/FAFAF8/1A1A1A?text=LogShare)
 
 ## Features
 
