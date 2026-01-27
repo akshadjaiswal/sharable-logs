@@ -40,7 +40,7 @@ export function Header() {
             <Link href="/dashboard">View Logs</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="#download">Download for Mac</Link>
+            <Link href="/create">Create Log</Link>
           </Button>
         </div>
       </div>
