@@ -18,7 +18,7 @@ export default function DashboardPage() {
   const { data: contextData } = useQuery({
     queryKey: ['log-contexts'],
     queryFn: async () => {
-      const response = await fetch('/api/logs/list?limit=1000');
+      const response = await fetch('/api/logs/list?limit=100');
       if (!response.ok) throw new Error('Failed to fetch contexts');
       const data: ListLogsResponse = await response.json();
 
