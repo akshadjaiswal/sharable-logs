@@ -51,6 +51,71 @@
   .line[data-highlighted="true"] {
     @apply bg-accent/10 border-l-2 border-accent;
   }
+
+  /* HTTP Log Syntax Highlighting */
+  .http-method {
+    color: #4F46E5; /* Indigo */
+    font-weight: 600;
+  }
+
+  .status-success {
+    color: #10B981; /* Green */
+    font-weight: 500;
+  }
+
+  .status-client-error {
+    color: #F59E0B; /* Amber/Orange */
+    font-weight: 500;
+  }
+
+  .status-server-error {
+    color: #EF4444; /* Red */
+    font-weight: 600;
+  }
+
+  .timing {
+    color: #8B5CF6; /* Purple */
+  }
+
+  .timing .unit {
+    color: #A78BFA; /* Light purple */
+    opacity: 0.8;
+    font-size: 0.9em;
+  }
+
+  .metric-label {
+    color: #6B7280; /* Gray */
+    font-style: italic;
+  }
+
+  /* Comment Badge Styling */
+  .comment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    margin-left: 12px;
+    background: #B8860B; /* Gold accent */
+    color: white;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .comment-badge:hover {
+    background: #D4A84B; /* Lighter gold */
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+
+  /* Log Display Emphasis */
+  .log-line-content {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.75;
+    font-family: 'IBM Plex Mono', monospace;
+  }
 }
 
 @layer utilities {

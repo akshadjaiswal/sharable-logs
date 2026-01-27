@@ -34,6 +34,7 @@ export function detectContext(content: string): string {
     'Nginx': /nginx|error_log|access_log|\[error\]|\[warn\]/i,
     'Apache': /apache|httpd|AH\d+:/i,
     'Bash/Shell': /bash|sh:|zsh|command not found|permission denied|No such file or directory/i,
+    'HTTP': /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\s+\/|\d{3}\s+in\s+\d+(\.\d+)?(ms|μs|s)|(compile|render):\s+\d+/i,
   };
 
   // Count matches for each pattern
@@ -78,6 +79,7 @@ export function contextToLanguage(context: string): string {
     'PostgreSQL': 'sql',
     'MySQL': 'sql',
     'MongoDB': 'javascript',
+    'HTTP': 'text', // Will be enhanced with custom highlighting
     'Plain Text': 'text',
   };
 
