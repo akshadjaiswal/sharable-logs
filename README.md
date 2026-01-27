@@ -337,22 +337,15 @@ Contributions are welcome! Please follow these guidelines:
 ## License
 
 MIT License - see LICENSE file for details
-
-## Support
-
-- GitHub Issues: [Report bugs](https://github.com/your-repo/issues)
-- Documentation: [Full docs](https://your-docs-url.com)
-- Email: support@logshare.app
-
-## Credits
-
-Built with:
-- [Next.js](https://nextjs.org)
-- [Supabase](https://supabase.com)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Shiki](https://shiki.matsu.io)
-- [Lucide Icons](https://lucide.dev)
-
 ---
 
 **LogShare** - Share terminal logs beautifully. Made with ❤️ for developers.
+<div align="center">
+
+**Made with ❤️ by Akshad Jaiswal**
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/akshadjaiswal)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/akshadsantoshjaiswal)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/akshad_999)
+
+</div>
