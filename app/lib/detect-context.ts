@@ -34,7 +34,7 @@ export function detectContext(content: string): string {
     'Nginx': /nginx|error_log|access_log|\[error\]|\[warn\]/i,
     'Apache': /apache|httpd|AH\d+:/i,
     'Bash/Shell': /bash|sh:|zsh|command not found|permission denied|No such file or directory/i,
-    'HTTP': /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\s+\/|\d{3}\s+in\s+\d+(\.\d+)?(ms|μs|s)|(compile|render):\s+\d+/i,
+    'HTTP': /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS|CONNECT|TRACE)\s+\/|HTTP\/\d|\d{3}\s+(OK|in)\s+\d+(\.\d+)?(ms|μs|s)|(compile|render):\s+\d+|^[A-Z][A-Za-z-]+:\s/mi,
   };
 
   // Count matches for each pattern

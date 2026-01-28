@@ -88,6 +88,63 @@
     font-style: italic;
   }
 
+  /* Enhanced HTTP Log Syntax Highlighting */
+
+  /* HTTP Versions */
+  .http-version {
+    color: #2563EB; /* Blue */
+    font-weight: 500;
+    font-size: 0.95em;
+  }
+
+  /* URL Paths */
+  .http-path {
+    color: #059669; /* Teal */
+    font-weight: 500;
+  }
+
+  /* Query Parameters */
+  .http-query {
+    color: #D97706; /* Amber */
+    font-weight: 400;
+    opacity: 0.9;
+  }
+
+  /* HTTP Headers */
+  .http-header {
+    color: #7C3AED; /* Violet */
+    font-weight: 600;
+  }
+
+  .http-header-value {
+    color: #0284C7; /* Sky Blue */
+    font-weight: 400;
+  }
+
+  /* IP Addresses */
+  .http-ip {
+    color: #8B5CF6; /* Purple */
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Port Numbers */
+  .http-port {
+    color: #4F46E5; /* Indigo */
+    font-weight: 600;
+  }
+
+  /* Additional Status Code Categories */
+  .status-info {
+    color: #3B82F6; /* Blue for 1xx */
+    font-weight: 500;
+  }
+
+  .status-redirect {
+    color: #F59E0B; /* Amber for 3xx */
+    font-weight: 500;
+  }
+
   /* Comment Badge Styling */
   .comment-badge {
     display: inline-flex;
