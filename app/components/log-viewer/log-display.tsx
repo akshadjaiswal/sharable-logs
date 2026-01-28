@@ -12,6 +12,47 @@ export interface LogDisplayProps {
   commentCounts?: Record<number, number>;
 }
 
+/**
+ * Extracts content from Shiki line spans, handling nested spans correctly.
+ * Shiki wraps each line in <span class="line">...</span>, but the content inside
+ * can have multiple nested spans for syntax highlighting. This function uses
+ * balanced span counting to extract the complete inner HTML.
+ */
+function extractShikiLines(html: string): string[] {
+  const lines: string[] = [];
+  const lineRegex = /<span class="line"[^>]*>/g;
+  let match;
+
+  while ((match = lineRegex.exec(html)) !== null) {
+    const startPos = match.index + match[0].length;
+    let depth = 1;
+    let pos = startPos;
+
+    // Count opening and closing spans to find matching closing tag
+    while (depth > 0 && pos < html.length) {
+      const nextOpen = html.indexOf('<span', pos);
+      const nextClose = html.indexOf('</span>', pos);
+
+      if (nextClose === -1) break;
+
+      if (nextOpen !== -1 && nextOpen < nextClose) {
+        depth++;
+        pos = nextOpen + 5; // Move past '<span'
+      } else {
+        depth--;
+        pos = nextClose + 7; // Move past '</span>'
+      }
+    }
+
+    // Extract content between opening and closing tags
+    if (depth === 0) {
+      lines.push(html.substring(startPos, pos - 7));
+    }
+  }
+
+  return lines;
+}
+
 export function LogDisplay({
   log,
   highlightedHtml,
@@ -26,22 +67,22 @@ export function LogDisplay({
     if (!highlightedHtml) return lines;
 
     try {
-      // Parse Shiki HTML to extract individual line HTML
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(highlightedHtml, 'text/html');
-      const codeLines = doc.querySelectorAll('.line');
+      // Extract lines using balanced span matching
+      const extracted = extractShikiLines(highlightedHtml);
 
-      if (codeLines.length === 0) {
-        // Fallback: try to find any code element
-        const codeElement = doc.querySelector('code');
-        if (codeElement) {
-          // Split by line breaks in the HTML
-          return codeElement.innerHTML.split('\n').map(line => line.trim());
-        }
-        return lines;
+      if (extracted.length > 0) {
+        return extracted;
       }
 
-      return Array.from(codeLines).map(line => line.innerHTML);
+      // Fallback 1: Try to extract from <code> block
+      const codeMatch = highlightedHtml.match(/<code[^>]*>(.*?)<\/code>/s);
+      if (codeMatch) {
+        const codeContent = codeMatch[1];
+        return extractShikiLines(codeContent);
+      }
+
+      // Final fallback: use original lines
+      return lines;
     } catch (error) {
       console.error('Failed to parse highlighted HTML:', error);
       return lines;
