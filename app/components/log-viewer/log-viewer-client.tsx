@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { LogDisplay } from './log-display';
 import { LogMetadata } from './log-metadata';
 import { ShareControls } from './share-controls';
@@ -21,6 +22,27 @@ export function LogViewerClient({
   commentCount,
 }: LogViewerClientProps) {
   const [selectedLine, setSelectedLine] = React.useState<number | null>(null);
+
+  // Fetch comment counts per line
+  const { data: commentCounts } = useQuery({
+    queryKey: ['comment-counts', log.id],
+    queryFn: async () => {
+      const res = await fetch(`/api/comments?logId=${log.id}`);
+      if (!res.ok) return {};
+      const data = await res.json();
+
+      // Count comments per line number
+      const counts: Record<number, number> = {};
+      data.comments?.forEach((comment: any) => {
+        counts[comment.line_number] = (counts[comment.line_number] || 0) + 1;
+        // Count replies too
+        if (comment.replies?.length > 0) {
+          counts[comment.line_number] += comment.replies.length;
+        }
+      });
+      return counts;
+    },
+  });
 
   return (
     <div className="relative">
@@ -46,6 +68,7 @@ export function LogViewerClient({
               highlightedHtml={highlightedHtml}
               onLineClick={setSelectedLine}
               linesWithComments={linesWithComments}
+              commentCounts={commentCounts || {}}
             />
 
             {/* Mobile Metadata - Below log on mobile */}

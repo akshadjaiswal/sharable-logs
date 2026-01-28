@@ -1,11 +1,14 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Filters } from '@/components/dashboard/filters';
 import { LogList } from '@/components/dashboard/log-list';
 import { EmptyState } from '@/components/dashboard/empty-state';
+import { Button } from '@/components/ui/button';
 import { useDashboardFilters } from '@/lib/stores/dashboard-store';
+import { Plus } from 'lucide-react';
 import type { ListLogsResponse } from '@/lib/supabase/types';
 
 export default function DashboardPage() {
@@ -15,7 +18,7 @@ export default function DashboardPage() {
   const { data: contextData } = useQuery({
     queryKey: ['log-contexts'],
     queryFn: async () => {
-      const response = await fetch('/api/logs/list?limit=1000');
+      const response = await fetch('/api/logs/list?limit=100');
       if (!response.ok) throw new Error('Failed to fetch contexts');
       const data: ListLogsResponse = await response.json();
 
@@ -77,10 +80,20 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="border-b border-border bg-muted/30">
         <div className="container mx-auto px-6 py-12">
-          <h1 className="text-5xl font-display font-bold mb-3">Your Logs</h1>
-          <p className="text-lg text-muted-foreground">
-            Browse and manage all your shared terminal logs
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+            <div>
+              <h1 className="text-5xl font-display font-bold mb-3">Your Logs</h1>
+              <p className="text-lg text-muted-foreground">
+                Browse and manage all your shared terminal logs
+              </p>
+            </div>
+            <Button size="lg" asChild>
+              <Link href="/create">
+                <Plus className="mr-2 h-5 w-5" />
+                New Log
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 

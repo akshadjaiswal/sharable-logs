@@ -1,6 +1,48 @@
 import { codeToHtml } from 'shiki';
 
 /**
+ * Custom highlighting for HTTP request logs
+ * Shiki doesn't support HTTP logs well, so we add custom CSS classes
+ */
+function enhanceHTTPHighlighting(html: string): string {
+  let enhanced = html;
+
+  // Highlight HTTP methods
+  enhanced = enhanced.replace(
+    /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b/g,
+    '<span class="http-method">$1</span>'
+  );
+
+  // Highlight status codes by category
+  enhanced = enhanced.replace(
+    /\b(2\d{2})\b/g,
+    '<span class="status-success">$1</span>'
+  );
+  enhanced = enhanced.replace(
+    /\b(4\d{2})\b/g,
+    '<span class="status-client-error">$1</span>'
+  );
+  enhanced = enhanced.replace(
+    /\b(5\d{2})\b/g,
+    '<span class="status-server-error">$1</span>'
+  );
+
+  // Highlight timing metrics
+  enhanced = enhanced.replace(
+    /(\d+(?:\.\d+)?)(ms|μs|s)\b/g,
+    '<span class="timing">$1<span class="unit">$2</span></span>'
+  );
+
+  // Highlight compile/render labels
+  enhanced = enhanced.replace(
+    /(compile|render):/gi,
+    '<span class="metric-label">$1:</span>'
+  );
+
+  return enhanced;
+}
+
+/**
  * Highlights code using Shiki with server-side rendering
  * @param content - The code content to highlight
  * @param language - The language for syntax highlighting
@@ -35,6 +77,11 @@ export async function highlightCode(
       lang: mappedLanguage,
       theme: 'min-light', // Warm, minimal theme matching design system
     });
+
+    // Apply HTTP enhancements for text-based logs that might contain HTTP requests
+    if (mappedLanguage === 'txt' || mappedLanguage === 'text') {
+      return enhanceHTTPHighlighting(html);
+    }
 
     return html;
   } catch (error) {

@@ -9,6 +9,7 @@ export interface LogDisplayProps {
   highlightedHtml: string;
   onLineClick: (lineNumber: number) => void;
   linesWithComments: number[];
+  commentCounts?: Record<number, number>;
 }
 
 export function LogDisplay({
@@ -16,8 +17,36 @@ export function LogDisplay({
   highlightedHtml,
   onLineClick,
   linesWithComments,
+  commentCounts = {},
 }: LogDisplayProps) {
   const lines = log.content.split('\n');
+
+  // Parse highlighted HTML into individual line HTML strings
+  const highlightedLines = React.useMemo(() => {
+    if (!highlightedHtml) return lines;
+
+    try {
+      // Parse Shiki HTML to extract individual line HTML
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(highlightedHtml, 'text/html');
+      const codeLines = doc.querySelectorAll('.line');
+
+      if (codeLines.length === 0) {
+        // Fallback: try to find any code element
+        const codeElement = doc.querySelector('code');
+        if (codeElement) {
+          // Split by line breaks in the HTML
+          return codeElement.innerHTML.split('\n').map(line => line.trim());
+        }
+        return lines;
+      }
+
+      return Array.from(codeLines).map(line => line.innerHTML);
+    } catch (error) {
+      console.error('Failed to parse highlighted HTML:', error);
+      return lines;
+    }
+  }, [highlightedHtml, lines]);
 
   React.useEffect(() => {
     // Handle URL anchors (#L42)
@@ -42,7 +71,7 @@ export function LogDisplay({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden shadow-lg border-2">
       <div className="bg-muted/30 border-b border-border p-3 flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span className="font-mono">{lines.length} lines</span>
@@ -56,7 +85,7 @@ export function LogDisplay({
       </div>
 
       <div className="relative overflow-x-auto">
-        <div className="font-mono text-sm">
+        <div className="font-mono text-[15px] leading-7 p-2">
           {lines.map((_, index) => {
             const lineNumber = index + 1;
             const hasComments = linesWithComments.includes(lineNumber);
@@ -65,23 +94,26 @@ export function LogDisplay({
               <div
                 key={lineNumber}
                 data-line={lineNumber}
-                className="group flex hover:bg-muted/30 transition-colors cursor-pointer border-l-2 border-transparent hover:border-accent/50"
+                className="group flex hover:bg-accent/5 hover:shadow-sm transition-all cursor-pointer border-l-2 border-transparent hover:border-accent/50 rounded-sm"
                 onClick={() => handleLineClick(lineNumber)}
               >
                 {/* Line number */}
-                <div className="sticky left-0 bg-background group-hover:bg-muted/30 z-10 flex items-center gap-2 px-4 py-1 text-muted-foreground select-none min-w-[80px] border-r border-border">
-                  <span className="text-right w-12">{lineNumber}</span>
-                  {hasComments && (
-                    <MessageSquare className="h-3 w-3 text-accent" />
+                <div className="sticky left-0 bg-background group-hover:bg-accent/5 z-10 flex items-center gap-2 px-4 py-1 text-muted-foreground select-none min-w-[120px] border-r border-border">
+                  <span className="text-right w-12 font-medium">{lineNumber}</span>
+                  {hasComments && commentCounts[lineNumber] && (
+                    <span className="comment-badge">
+                      <MessageSquare className="h-3.5 w-3.5" />
+                      <span className="count">{commentCounts[lineNumber]}</span>
+                    </span>
                   )}
                 </div>
 
                 {/* Line content */}
                 <div className="flex-1 px-4 py-1 overflow-x-auto">
-                  <pre className="whitespace-pre-wrap break-all">
-                    {lines[index]}
-                  </pre>
-                </div>
+                  <div
+                    className="log-line-content"
+                    dangerouslySetInnerHTML={{ __html: highlightedLines[index] || lines[index] }}
+                  /></div>
               </div>
             );
           })}

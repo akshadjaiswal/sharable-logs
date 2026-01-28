@@ -36,18 +36,27 @@ export function Hero() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Button size="lg" asChild>
-              <Link href="#download">
+              <Link href="/create">
                 <Download className="mr-2 h-5 w-5" />
-                Download for Mac
+                Create Your First Log
               </Link>
             </Button>
             <Button variant="secondary" size="lg" asChild>
               <Link href="/dashboard">
-                View Demo Log
+                View Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
+
+          {/* Tertiary CTA */}
+          <p className="text-sm text-muted-foreground mt-4">
+            Or{' '}
+            <Link href="#download" className="text-accent hover:underline">
+              download the desktop app
+            </Link>
+            {' '}for macOS
+          </p>
 
           {/* Feature pills */}
           <div className="flex flex-wrap gap-3 justify-center pt-8">
