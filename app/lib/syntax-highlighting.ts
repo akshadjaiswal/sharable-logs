@@ -3,20 +3,65 @@ import { codeToHtml } from 'shiki';
 /**
  * Custom highlighting for HTTP request logs
  * Shiki doesn't support HTTP logs well, so we add custom CSS classes
+ * Order matters: Apply most specific patterns first to avoid conflicts
  */
 function enhanceHTTPHighlighting(html: string): string {
   let enhanced = html;
 
-  // Highlight HTTP methods
+  // 1. Highlight HTTP methods
   enhanced = enhanced.replace(
-    /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b/g,
+    /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS|CONNECT|TRACE)\b/g,
     '<span class="http-method">$1</span>'
   );
 
-  // Highlight status codes by category
+  // 2. Highlight HTTP version
+  enhanced = enhanced.replace(
+    /\b(HTTP\/[0-9.]+)\b/g,
+    '<span class="http-version">$1</span>'
+  );
+
+  // 3. Highlight URL paths
+  enhanced = enhanced.replace(
+    /\s(\/[^\s?]*)/g,
+    ' <span class="http-path">$1</span>'
+  );
+
+  // 4. Highlight query parameters
+  enhanced = enhanced.replace(
+    /(\?[^\s]+)/g,
+    '<span class="http-query">$1</span>'
+  );
+
+  // 5. Highlight headers
+  enhanced = enhanced.replace(
+    /^([A-Z][A-Za-z-]+):\s*(.+)$/gm,
+    '<span class="http-header">$1:</span> <span class="http-header-value">$2</span>'
+  );
+
+  // 6. Highlight IP addresses
+  enhanced = enhanced.replace(
+    /\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g,
+    '<span class="http-ip">$1</span>'
+  );
+
+  // 7. Highlight ports
+  enhanced = enhanced.replace(
+    /:(\d{2,5})\b/g,
+    ':<span class="http-port">$1</span>'
+  );
+
+  // 8. Highlight status codes by category
+  enhanced = enhanced.replace(
+    /\b(1\d{2})\b/g,
+    '<span class="status-info">$1</span>'
+  );
   enhanced = enhanced.replace(
     /\b(2\d{2})\b/g,
     '<span class="status-success">$1</span>'
+  );
+  enhanced = enhanced.replace(
+    /\b(3\d{2})\b/g,
+    '<span class="status-redirect">$1</span>'
   );
   enhanced = enhanced.replace(
     /\b(4\d{2})\b/g,
@@ -27,13 +72,13 @@ function enhanceHTTPHighlighting(html: string): string {
     '<span class="status-server-error">$1</span>'
   );
 
-  // Highlight timing metrics
+  // 9. Highlight timing metrics
   enhanced = enhanced.replace(
     /(\d+(?:\.\d+)?)(ms|μs|s)\b/g,
     '<span class="timing">$1<span class="unit">$2</span></span>'
   );
 
-  // Highlight compile/render labels
+  // 10. Highlight compile/render labels
   enhanced = enhanced.replace(
     /(compile|render):/gi,
     '<span class="metric-label">$1:</span>'
@@ -78,11 +123,8 @@ export async function highlightCode(
       theme: 'min-light', // Warm, minimal theme matching design system
     });
 
-    // Apply HTTP enhancements for text-based logs that might contain HTTP requests
-    if (mappedLanguage === 'txt' || mappedLanguage === 'text') {
-      return enhanceHTTPHighlighting(html);
-    }
-
+    // Return HTML as-is - HTTP enhancement is now applied client-side per-line
+    // This ensures proper styling regardless of Shiki's output structure
     return html;
   } catch (error) {
     console.error('Syntax highlighting error:', error);

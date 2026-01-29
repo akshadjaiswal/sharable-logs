@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { HorizontalRule } from '@/components/ui/horizontal-rule';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 
 export function Hero() {
   return (
@@ -37,7 +37,7 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Button size="lg" asChild>
               <Link href="/create">
-                <Download className="mr-2 h-5 w-5" />
+                <Plus className="mr-2 h-5 w-5" />
                 Create Your First Log
               </Link>
             </Button>
