@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getLog, incrementViewCount } from '@/lib/supabase/logs-service';
+import { getLog, incrementViewCount, deleteLog } from '@/lib/supabase/logs-service';
 
 export async function GET(
   request: NextRequest,
@@ -39,6 +39,42 @@ export async function GET(
     return NextResponse.json(
       {
         error: 'Failed to fetch log',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    // Validate UUID format (basic check)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      return NextResponse.json(
+        { error: 'Invalid log ID format' },
+        { status: 400 }
+      );
+    }
+
+    // Delete log using existing service function
+    await deleteLog(id);
+
+    return NextResponse.json(
+      { success: true, id },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error in DELETE /api/logs/[id]:', error);
+
+    return NextResponse.json(
+      {
+        error: 'Failed to delete log',
         message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
