@@ -40,6 +40,7 @@ ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS public_read_logs ON logs;
 DROP POLICY IF EXISTS public_create_logs ON logs;
 DROP POLICY IF EXISTS public_update_logs ON logs;
+DROP POLICY IF EXISTS public_delete_logs ON logs;
 DROP POLICY IF EXISTS public_read_comments ON comments;
 DROP POLICY IF EXISTS public_create_comments ON comments;
 
@@ -54,6 +55,10 @@ CREATE POLICY public_create_logs ON logs
 
 CREATE POLICY public_update_logs ON logs
   FOR UPDATE
+  USING (true);
+
+CREATE POLICY public_delete_logs ON logs
+  FOR DELETE
   USING (true);
 
 -- RLS Policies for comments (public access for MVP)
