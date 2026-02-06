@@ -50,7 +50,7 @@ export function LogListItem({ log }: LogListItemProps) {
       // Optimistically update: remove the deleted log from all query caches
       queryClient.setQueriesData<any>(
         { queryKey: ['logs'] },
-        (old) => {
+        (old: any) => {
           if (!old) return old;
 
           // Handle infinite query structure

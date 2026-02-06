@@ -65,7 +65,7 @@ export function Dialog({
               {cancelText}
             </Button>
             <Button
-              variant={variant === 'danger' ? 'default' : 'default'}
+              variant="primary"
               onClick={handleConfirm}
               className={variant === 'danger' ? 'bg-red-600 hover:bg-red-700 text-white' : ''}
             >
